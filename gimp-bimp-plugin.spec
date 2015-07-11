@@ -2,36 +2,45 @@ Name:           gimp-bimp-plugin
 Version:        1.14
 Release:        1%{?dist}
 Summary:        Batch Image Manipulation Plugin
-
-License:        GPL-2.0+
+ 
+License:        GPLv2+
 URL:            http://www.alessandrofrancesconi.it/projects/bimp/
 Source0:        https://github.com/alessandrofrancesconi/gimp-plugin-bimp/archive/v%{version}.tar.gz
-
+ 
 BuildRequires:  pcre-devel
 BuildRequires:  gimp-devel >= 2.6.0
 Requires:       gimp >= 2.6.0
-
+ 
 %description
 Use BIMP to apply a set of GIMP manipulations to groups of images.
-
+ 
 %prep
-%setup -q
-
+%setup -q -n gimp-bimp-plugin-%{version}
+sed -i -e 's|gcc -o ./bin/bimp|gcc -o ./bin/bimp $(CFLAGS)|' Makefile
+echo '#!/bin/bash' > configure
+chmod +x configure
+ 
 %build
-make
-
+%configure
+make %{?_smp_mflags}
+ 
 %install
-mkdir -p %{buildroot}%{_libdir}/gimp/2.0/plug-ins
-cp ./bin/bimp %{buildroot}%{_libdir}/gimp/2.0/plug-ins
-cp -Rf ./bin/win32/bimp-locale/ %{buildroot}%{_libdir}/gimp/2.0/plug-ins
-
-%files
-%doc CHANGELOG LICENSE README.md
-%defattr(-,root,root)
-%dir %{_libdir}/gimp/2.0/plug-ins
-%attr(0755,root,root) %{_libdir}/gimp/2.0/plug-ins/bimp
-%{_libdir}/gimp/2.0/plug-ins/bimp-locale
-
+GIMP_PLUGINS_DIR=`gimptool-2.0 --gimpplugindir`
+mkdir -p %{buildroot}$GIMP_PLUGINS_DIR/plug-ins
+install -m 0755 -p ./bin/bimp %{buildroot}$GIMP_PLUGINS_DIR/plug-ins
+mkdir -p %{buildroot}%{_datadir}/locale/
+cp -rf ./bin/win32/bimp-locale/* %{buildroot}%{_datadir}/locale/
+find %{buildroot}%{_datadir}/locale/ -name "*.po" -exec rm -rf {} \;
+%find_lang gimp20-plugin-bimp
+ 
+%files -f gimp20-plugin-bimp.lang
+%doc CHANGELOG README.md
+%license LICENSE
+%{_libdir}/gimp/2.0/plug-ins/bimp
+ 
 %changelog
+* Sat Jul 11 2015 Vasiliy N. Glazov <vascom2@gmail.com> - 1.14-1
+- Clean spec
+
 * Fri Jul 10 2015 Maxim Orlov <murmansksity@gmail.com> - 1.14-1
 - Initial package.
