@@ -1,5 +1,5 @@
 Name:           gimp-bimp-plugin
-Version:        1.14
+Version:        1.15
 Release:        1%{?dist}
 Summary:        Batch Image Manipulation Plugin
 
@@ -29,8 +29,8 @@ GIMP_PLUGINS_DIR=`gimptool-2.0 --gimpplugindir`
 mkdir -p %{buildroot}$GIMP_PLUGINS_DIR/plug-ins
 install -m 0755 -p ./bin/bimp %{buildroot}$GIMP_PLUGINS_DIR/plug-ins
 mkdir -p %{buildroot}%{_datadir}/locale/
-cp -ai ./bin/win32/bimp-locale/* %{buildroot}%{_datadir}/locale/
-find %{buildroot}%{_datadir}/locale/ -name "*.po" -exec rm -rf {} \;
+cp -ai ./bimp-locale/* %{buildroot}%{_datadir}/locale/
+find %{buildroot}%{_datadir}/locale/ -name "*.po*" -exec rm -rf {} \;
 %find_lang gimp20-plugin-bimp
 
 %files -f gimp20-plugin-bimp.lang
@@ -39,6 +39,9 @@ find %{buildroot}%{_datadir}/locale/ -name "*.po" -exec rm -rf {} \;
 %{_libdir}/gimp/2.0/plug-ins/bimp
 
 %changelog
+* Mon Jul 13 2015 Maxim Orlov <murmansksity@gmail.com> - 1.15-1
+- Update to 1.15
+
 * Sat Jul 11 2015 Vasiliy N. Glazov <vascom2@gmail.com> - 1.14-1
 - Clean spec
 
