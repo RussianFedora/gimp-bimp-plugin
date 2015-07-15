@@ -15,7 +15,7 @@ Requires:       gimp >= 2.6.0
 Use BIMP to apply a set of GIMP manipulations to groups of images.
 
 %prep
-%autosetup
+%autosetup -n gimp-plugin-bimp-%{version}
 sed -i -e 's|gcc -o ./bin/bimp|gcc -o ./bin/bimp $(CFLAGS)|' Makefile
 echo '#!/bin/bash' > configure
 chmod +x configure
