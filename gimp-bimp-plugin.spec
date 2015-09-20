@@ -1,12 +1,12 @@
 Name:           gimp-bimp-plugin
-Version:        1.15
+Version:        1.16
 Release:        1%{?dist}
 Summary:        Batch Image Manipulation Plugin
 
 License:        GPLv2+
 URL:            http://www.alessandrofrancesconi.it/projects/bimp/
-Source0:        https://github.com/alessandrofrancesconi/gimp-plugin-bimp/archive/v%{version}/%{name}-%{version}.tar.gz
- 
+Source0:        https://github.com/alessandrofrancesconi/gimp-plugin-bimp/archive/v%{version}.tar.gz
+
 BuildRequires:  pcre-devel
 BuildRequires:  gimp-devel >= 2.6.0
 Requires:       gimp >= 2.6.0
@@ -30,15 +30,18 @@ mkdir -p %{buildroot}$GIMP_PLUGINS_DIR/plug-ins
 install -m 0755 -p ./bin/bimp %{buildroot}$GIMP_PLUGINS_DIR/plug-ins
 mkdir -p %{buildroot}%{_datadir}/locale/
 cp -ai ./bimp-locale/* %{buildroot}%{_datadir}/locale/
-find %{buildroot}%{_datadir}/locale/ -name "*.po*" -exec rm -rf {} \;
+find %{buildroot}%{_datadir}/locale/ -name "*.po" -exec rm -rf {} \;
 %find_lang gimp20-plugin-bimp
 
 %files -f gimp20-plugin-bimp.lang
-%doc CHANGELOG README.md
+%doc CHANGELOG.md README.md
 %license LICENSE
 %{_libdir}/gimp/2.0/plug-ins/bimp
 
 %changelog
+* Sun Sep 20 2015 Maxim Orlov <murmansksity@gmail.com> - 1.16-1
+- Update to 1.16
+
 * Mon Jul 13 2015 Maxim Orlov <murmansksity@gmail.com> - 1.15-1
 - Update to 1.15
 
