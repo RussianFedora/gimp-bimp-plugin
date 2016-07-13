@@ -1,5 +1,5 @@
 Name:           gimp-bimp-plugin
-Version:        1.16
+Version:        1.17
 Release:        1%{?dist}
 Summary:        Batch Image Manipulation Plugin
 
@@ -7,8 +7,8 @@ License:        GPLv2+
 URL:            http://www.alessandrofrancesconi.it/projects/bimp/
 Source0:        https://github.com/alessandrofrancesconi/gimp-plugin-bimp/archive/v%{version}.tar.gz
 
-BuildRequires:  pcre-devel
-BuildRequires:  gimp-devel >= 2.6.0
+BuildRequires:  pkgconfig(libpcre)
+BuildRequires:  pkgconfig(gimp-2.0) >= 2.6.0
 Requires:       gimp >= 2.6.0
  
 %description
@@ -17,12 +17,12 @@ Use BIMP to apply a set of GIMP manipulations to groups of images.
 %prep
 %autosetup -n gimp-plugin-bimp-%{version}
 sed -i -e 's|gcc -o ./bin/bimp|gcc -o ./bin/bimp $(CFLAGS)|' Makefile
-echo '#!/bin/bash' > configure
-chmod +x configure
+echo '#!/bin/bash' > ./configure
+chmod +x ./configure
 
 %build
 %configure
-make %{?_smp_mflags}
+%make_build
 
 %install
 GIMP_PLUGINS_DIR=`gimptool-2.0 --gimpplugindir`
@@ -39,6 +39,11 @@ find %{buildroot}%{_datadir}/locale/ -name "*.po" -exec rm -rf {} \;
 %{_libdir}/gimp/2.0/plug-ins/bimp
 
 %changelog
+* Wed Jul 13 2016 Maxim Orlov <murmansksity@gmail.com> - 1.17-1
+- Update to 1.17
+- Use pkgconfig for BR
+- Use %%make_build macros
+
 * Sun Sep 20 2015 Maxim Orlov <murmansksity@gmail.com> - 1.16-1
 - Update to 1.16
 
